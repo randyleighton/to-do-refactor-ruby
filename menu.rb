@@ -28,6 +28,7 @@ def create_list
   puts "Enter a new list: "
   inputted_list = gets.chomp
   List.new(inputted_list).save
+  @current_list = List.all.last
   task_menu
 end
 
@@ -38,8 +39,10 @@ def display_lists
     end
   puts "\nChoose the number you want: "
   list_choice = gets.chomp.to_i
-  List.all[list_choice]
-  puts "The list you chose is:  #{List.all.name}\n"
+  @current_list = List.all[list_choice]
+  puts "The list you chose is:  #{@current_list.name}\n"
+
+  # puts "The list you chose is:  #{List.all[list_choice].name}\n"
   task_menu
 end
 
@@ -75,8 +78,8 @@ end
 def add_task
   puts"Enter task here:"
   user_description = gets.chomp
-  List.all.add_task(Task.new(user_description))
-  current_task = List.all.tasks.last
+  @current_list.add_task(Task.new(user_description))
+  current_task = @current_list.tasks.last
   puts "Priority [1] - [5]"
   task_priority = gets.chomp.to_i
   current_task.set_priority(task_priority)
@@ -88,7 +91,7 @@ end
 
 def list_tasks
   puts "Here are your tasks:"
-  List.all.tasks.each do |task|
+  @current_list.tasks.each do |task|
   puts task.description + ", Status: " + task.status + ", Priority: " +
        task.priority.to_s + ", Due Date: " + task.date
   end
@@ -96,7 +99,7 @@ def list_tasks
 end
 
 def list_with_index
-  List.all.tasks.each_with_index do |task, index|
+  @current_list.tasks.each_with_index do |task, index|
     puts index.to_s + ", " + task.description + ", Status: " + task.status + ", Priority: " +
          task.priority.to_s + ", Due Date: " + task.date
   end
@@ -107,8 +110,8 @@ def mark_task
   puts "Choose the task number you want to mark as complete"
   list_with_index
   task_choice = gets.chomp.to_i
-  List.all.tasks[task_choice].set_status("Complete")
-  puts "#{List.all.tasks[task_choice].description} is now marked Complete\n"
+  @current_list.tasks[task_choice].set_status("Complete")
+  puts "#{@current_list.tasks[task_choice].description} is now marked Complete\n"
   puts "\nHere are your current tasks:"
   list_with_index
 
@@ -118,7 +121,7 @@ def delete_task
   puts "Choose the task number you want to delete"
   list_with_index
   task_choice = gets.chomp.to_i
-  List.all.tasks.delete_at(task_choice)
+  @current_list.tasks.delete_at(task_choice)
   puts "\nHere are your current tasks:"
   list_with_index
 end
@@ -128,7 +131,7 @@ def sort_tasks
   puts "[p] priority [d] date [n] task name"
   task_choice = gets.chomp
   puts "Sorting the objects!\n"
-  List.all.tasks_by(task_choice)
+  @current_list.tasks_by(task_choice)
   puts "\nSorted list:"
   list_with_index
 end

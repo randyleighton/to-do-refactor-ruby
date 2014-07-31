@@ -10,14 +10,14 @@ class List
     @@all_lists = []
   end
 
-  def initialize(list)
-    @list = list
+  def initialize(name)
+    @name = name
     @tasks = []
 
   end
 
   def save
-    @@all_list << self
+    @@all_lists << self
   end
 
   def tasks
@@ -30,7 +30,7 @@ class List
   end
 
   def name
-    @list
+    @name
   end
 
   def tasks_by(criteria)
